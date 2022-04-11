@@ -12,6 +12,7 @@ var W_BRICK = 20;
 var H_BRICK = 10;
 
 function main() {
+	var playing = true;
 	var paddle = document.getElementById("paddle");
 	var game = document.getElementById("game");
 	var lifes = document.getElementsByClassName("life");
@@ -30,7 +31,7 @@ function main() {
 		vballx = 2;
 		vbally = -2;
 		pballx = 225;
-		pbally = 480;
+		pbally = 400;
 	}
 	resetball();
 
@@ -47,8 +48,6 @@ function main() {
 
 	// initial positions of paddle and ball
 	ppaddlex = 200;
-	pbally = 480;
-	pballx = 225;
 
 
 	// some events
@@ -59,12 +58,12 @@ function main() {
 			message.innerHTML = "Game over :(";
 			vballx = vbally = 0;
 			ball.classList.add('invisible');
+			playing = false;
 		}
 	}
 
 	// key listener
 	window.onkeydown = (e) => {
-		console.log(e);
 		if (e.key == "ArrowRight") {
 			rightpressed = true;
 		} else if (e.key == "ArrowLeft") {
@@ -73,7 +72,6 @@ function main() {
 	};
 
 	window.onkeyup = (e) => {
-		console.log(e);
 		if (e.key == "ArrowRight") {
 			rightpressed = false;
 		} else if (e.key == "ArrowLeft") {
@@ -106,9 +104,14 @@ function main() {
 		}
 
 		if (470 <= pbally && pbally < 490 &&
-			ppaddlex <= pballx && pballx < ppaddlex + 100) {
+			ppaddlex <= pballx && pballx < ppaddlex + W_PADDLE) {
 			// collision with paddle
 			vbally = -Math.abs(vbally);
+			// which quintet?
+			var quintet = (pballx - (ppaddlex + W_PADDLE/2)) / W_PADDLE * 5;
+			console.log('quintet', quintet);
+			vballx += quintet;
+			console.log('vballx', vballx);
 		}
 
 		// brick collisions
@@ -149,10 +152,12 @@ function main() {
 		}
 
 		// ball movement
-		pballx += vballx;
-		pbally += vbally;
-		ball.style.left = pballx + "px";
-		ball.style.top = pbally + "px";
+		if (playing) {
+			pballx += vballx;
+			pbally += vbally;
+			ball.style.left = pballx + "px";
+			ball.style.top = pbally + "px";
+		}
 
 
 		// paddle
