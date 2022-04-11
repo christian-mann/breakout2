@@ -115,7 +115,7 @@ function main() {
 	balls[0].elem.classList.add("team-0");
 	balls[0].px = 225;
 	balls[0].py = 400;
-	balls[0].vx = 2;
+	balls[0].vx = Math.random() * 4 - 2;
 	balls[0].vy = -2;
 	game.appendChild(balls[0].elem);
 
@@ -125,7 +125,7 @@ function main() {
 	balls[1].team = 1;
 	balls[1].px = 225;
 	balls[1].py = 100;
-	balls[1].vx = -2;
+	balls[1].vx = Math.random() * 4 - 2;
 	balls[1].vy = 2;
 	game.appendChild(balls[1].elem);
 
@@ -133,7 +133,7 @@ function main() {
 	paddles[0].elem = document.createElement("div");
 	paddles[0].elem.classList.add("paddle");
 	paddles[0].elem.classList.add("team-0");
-	game.appendChild(paddles[0].elem);
+	//game.appendChild(paddles[0].elem);
 	paddles[0].px = 200;
 	paddles[0].py = H_GAME - H_PADDLE - 20;
 
@@ -141,9 +141,10 @@ function main() {
 	paddles[1].elem.classList.add("paddle");
 	paddles[1].elem.classList.add("team-1");
 	paddles[1].team = 1;
-	game.appendChild(paddles[1].elem);
+	//game.appendChild(paddles[1].elem);
 	paddles[1].px = 210;
 	paddles[1].py = 20;
+	paddles = []
 
 	// add bricks
 	var bricks = [];
