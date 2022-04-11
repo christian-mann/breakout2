@@ -15,11 +15,9 @@ function main() {
 	var playing = true;
 	var paddle = document.getElementById("paddle");
 	var game = document.getElementById("game");
-	var lifes = document.getElementsByClassName("life");
 	var message = document.getElementById("message");
 
-	var leftpressed = false;
-	var rightpressed = false;
+	var vpaddlex = 0;
 
 	var ppaddlex = 0;
 	var vballx;
@@ -36,12 +34,12 @@ function main() {
 	resetball();
 
 	// add bricks
-	for (var row = 0; row < 3; row++) {
+	for (var row = 0; row < H_GAME/H_BRICK/2; row++) {
 		for (var col = 0; col < W_GAME/W_BRICK; col++) {
 			var brick = document.createElement("div");
 			brick.classList.add("brick");
 			brick.style.left = col * (W_BRICK);
-			brick.style.top = 40 + row * H_BRICK;
+			brick.style.top = row * H_BRICK;
 			game.appendChild(brick);
 		}
 	}
@@ -50,32 +48,18 @@ function main() {
 	ppaddlex = 200;
 
 
-	// some events
-	function loselife() {
-		if (lifes.length > 0) {
-			lifes[0].parentElement.removeChild(lifes[0]);
-		} else {
-			message.innerHTML = "Game over :(";
-			vballx = vbally = 0;
-			ball.classList.add('invisible');
-			playing = false;
-		}
-	}
-
 	// key listener
 	window.onkeydown = (e) => {
 		if (e.key == "ArrowRight") {
-			rightpressed = true;
+			vpaddlex = 3;
 		} else if (e.key == "ArrowLeft") {
-			leftpressed = true;
+			vpaddlex = -3;
 		}
 	};
 
 	window.onkeyup = (e) => {
-		if (e.key == "ArrowRight") {
-			rightpressed = false;
-		} else if (e.key == "ArrowLeft") {
-			leftpressed = false;
+		if (e.key == "ArrowRight" || e.key == "ArrowLeft") {
+			vpaddlex = 0;
 		}
 	}
 	
@@ -99,7 +83,6 @@ function main() {
 
 		if (pbally >= H_GAME - H_BALL) {
 			// floor
-			loselife();
 			resetball();
 		}
 
@@ -160,13 +143,9 @@ function main() {
 
 
 		// paddle
-		if (leftpressed) {
-			ppaddlex -= 3;
-			if (ppaddlex < 0) ppaddlex = 0;
-		} else if (rightpressed) {
-			ppaddlex += 3;
-			if (ppaddlex > 400) ppaddlex = 400;
-		}
+		ppaddlex += vpaddlex;
+		if (ppaddlex < 0) ppaddlex = 0;
+		if (ppaddlex > W_GAME - W_PADDLE) ppaddlex = W_GAME - W_PADDLE;
 		paddle.style.left = ppaddlex + "px";
 	}, 10);
 };
