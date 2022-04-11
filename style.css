@@ -1,0 +1,58 @@
+#game {
+	position: relative;
+	border: 1px solid blue;
+	width: 500px;
+	margin: 0 auto;
+	height: 500px;
+}
+
+#paddle {
+	background-color: red;
+	position: absolute;
+	width: 100px;
+	height: 10px;
+}
+
+#track {
+	height: 10px;
+	background-color: #eee;
+	position: absolute;
+	bottom: 20px;
+}
+
+#ball {
+	border: 5px blue solid;
+	border-radius: 5px;
+	width: 0;
+	height: 0;
+	position: absolute;
+}
+
+.life {
+	border: 5px blue solid;
+	border-radius: 5px;
+	width: 0;
+	height: 0;
+	float: right;
+	position: relative;
+}
+
+
+.brick {
+	position: absolute;
+	background-color: green;
+	width: 20px;
+	height: 10px;
+}
+
+#message {
+	font-family: sans-serif;
+	color: red;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.invisible {
+	display: none;
+}
