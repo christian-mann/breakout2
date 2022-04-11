@@ -6,21 +6,15 @@
 	height: 500px;
 }
 
-#paddle {
+.paddle {
 	background-color: red;
 	position: absolute;
 	width: 100px;
 	height: 10px;
-}
-
-#track {
-	height: 10px;
-	background-color: #eee;
-	position: absolute;
 	bottom: 20px;
 }
 
-#ball {
+.ball {
 	border: 5px blue solid;
 	border-radius: 5px;
 	width: 0;
@@ -40,9 +34,16 @@
 
 .brick {
 	position: absolute;
-	background-color: green;
+	opacity: 0.5;
 	width: 20px;
 	height: 10px;
+}
+
+.brick.team-0 {
+	background-color: green;
+}
+.brick.team-1 {
+	background-color: red;
 }
 
 #message {
