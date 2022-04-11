@@ -231,6 +231,8 @@ function main() {
 					// left
 					myBall.vx = -Math.abs(myBall.vx);
 				}
+				myBall.vx += Math.random() * 0.2 - 0.1;
+				myBall.vy += Math.random() * 0.2 - 0.1;
 				myBrick.elem.classList.remove("team-"+myBrick.team);
 				myBrick.team = 1 - myBall.team;
 				myBrick.elem.classList.add("team-"+myBrick.team);
