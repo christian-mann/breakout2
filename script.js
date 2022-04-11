@@ -87,7 +87,7 @@ function main() {
 			vballx = Math.abs(vballx);
 		}
 
-		if (pballx >= 500 - 10) {
+		if (pballx >= W_GAME - W_BALL) {
 			// right wall
 			vballx = -Math.abs(vballx);
 		}
@@ -97,7 +97,7 @@ function main() {
 			vbally = Math.abs(vbally);
 		}
 
-		if (pbally >= 500 - 10) {
+		if (pbally >= H_GAME - H_BALL) {
 			// floor
 			loselife();
 			resetball();
@@ -118,7 +118,6 @@ function main() {
 		for (var brick of document.querySelectorAll(".brick")) {
 			pbrickx = Number(brick.style.left.slice(0,-2));
 			pbricky = Number(brick.style.top.slice(0,-2));
-			//console.log(pbrickx, pbricky);
 			// top wall
 			if (Math.abs(pbally + 10 - pbricky) <= 2 &&
 				between(pbrickx, pballx, pbrickx + W_BRICK)) {
