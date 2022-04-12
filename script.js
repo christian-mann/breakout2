@@ -9,8 +9,8 @@ var W_PADDLE = 100;
 var H_PADDLE = 10;
 var W_BALL = 10;
 var H_BALL = 10;
-var W_BRICK = 20;
-var H_BRICK = 10;
+var W_BRICK = 50;
+var H_BRICK = 20;
 
 class Physics {
 	constructor() {
@@ -22,6 +22,7 @@ class Physics {
 		this.height = 0;
 		this.elem = null;
 		this.team = 0;
+		this.bouncy = false;
 	}
 
 	update() {
@@ -29,19 +30,19 @@ class Physics {
 		this.py += this.vy;
 		if (this.px < 0) {
 			this.px = 0;
-			this.vx = Math.abs(this.vx);
+			this.vx = this.bouncy * Math.abs(this.vx);
 		}
 		if (this.px + this.width > W_GAME) {
 			this.px = W_GAME - this.width;
-			this.vx = -Math.abs(this.vx);
+			this.vx = this.bouncy * -Math.abs(this.vx);
 		}
 		if (this.py < 0) {
 			this.py = 0;
-			this.vy = Math.abs(this.vy);
+			this.vy = this.bouncy * Math.abs(this.vy);
 		}
 		if (this.py + this.height > H_GAME) {
 			this.py = H_GAME - this.height;
-			this.vy = -Math.abs(this.vy);
+			this.vy = this.bouncy * -Math.abs(this.vy);
 		}
 	}
 
@@ -78,6 +79,7 @@ class Paddle extends Physics {
 		super();
 		this.width = W_PADDLE;
 		this.height = H_PADDLE;
+		this.bouncy = false;
 	}
 }
 
@@ -86,6 +88,7 @@ class Ball extends Physics {
 		super();
 		this.width = W_BALL;
 		this.height = H_BALL;
+		this.bouncy = true;
 	}
 
 	draw() {
@@ -133,7 +136,7 @@ function main() {
 	paddles[0].elem = document.createElement("div");
 	paddles[0].elem.classList.add("paddle");
 	paddles[0].elem.classList.add("team-0");
-	//game.appendChild(paddles[0].elem);
+	game.appendChild(paddles[0].elem);
 	paddles[0].px = 200;
 	paddles[0].py = H_GAME - H_PADDLE - 20;
 
@@ -141,10 +144,9 @@ function main() {
 	paddles[1].elem.classList.add("paddle");
 	paddles[1].elem.classList.add("team-1");
 	paddles[1].team = 1;
-	//game.appendChild(paddles[1].elem);
+	game.appendChild(paddles[1].elem);
 	paddles[1].px = 210;
 	paddles[1].py = 20;
-	paddles = []
 
 	// add bricks
 	var bricks = [];
@@ -220,16 +222,16 @@ function main() {
 
 				if (-15 <= angle && angle < 15) {
 					// right
-					myBall.vx = Math.abs(myBall.vx);
+					myBall.vx = myBall.bouncy * Math.abs(myBall.vx);
 				} else if (15 <= angle && angle < 165) {
 					// top
-					myBall.vy = -Math.abs(myBall.vy);
+					myBall.vy = myBall.bouncy * -Math.abs(myBall.vy);
 				} else if (-165 <= angle && angle < -15) {
 					// bottom
-					myBall.vy = Math.abs(myBall.vy);
+					myBall.vy = myBall.bouncy * Math.abs(myBall.vy);
 				} else {
 					// left
-					myBall.vx = -Math.abs(myBall.vx);
+					myBall.vx = myBall.bouncy * -Math.abs(myBall.vx);
 				}
 				myBall.vx += Math.random() * 0.2 - 0.1;
 				myBall.vy += Math.random() * 0.2 - 0.1;
