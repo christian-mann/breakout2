@@ -12,6 +12,10 @@ var H_BALL = 10;
 var W_BRICK = 50;
 var H_BRICK = 20;
 
+function message(s) {
+	document.getElementById('message').innerText = s;
+}
+
 class Physics {
 	constructor() {
 		this.px = 0;
@@ -23,6 +27,12 @@ class Physics {
 		this.elem = null;
 		this.team = 0;
 		this.bouncy = false;
+	}
+
+	// handlers
+	handle_top_wall() {}
+	handle_bottom_wall() {
+		//alert('handle_bottom_wall original');
 	}
 
 	update() {
@@ -39,10 +49,12 @@ class Physics {
 		if (this.py < 0) {
 			this.py = 0;
 			this.vy = this.bouncy * Math.abs(this.vy);
+			this.handle_top_wall()
 		}
 		if (this.py + this.height > H_GAME) {
 			this.py = H_GAME - this.height;
 			this.vy = this.bouncy * -Math.abs(this.vy);
+			this.handle_bottom_wall()
 		}
 	}
 
@@ -97,6 +109,35 @@ class Ball extends Physics {
 			this.elem.style.width = 0;
 			this.elem.style.height = 0;
 		}
+	}
+
+	handle_bottom_wall() {
+		// you suck, timeout 5 seconds
+		console.log('gay baby jail');
+		this.vx = 0;
+		this.vy = 0;
+		
+		var elem_escrow = this.elem;
+		this.elem = null;
+
+		// capture this
+		var ball = this;
+
+		message('You suck. Timeout for 5 seconds.');
+		var timeout = 5;
+		var interval = setInterval(() => {
+			if (--timeout > 0) {
+				message('You suck. Timeout for ' + timeout + ' seconds.');
+			} else {
+				message('');
+				this.py = 400;
+				this.px = 225;
+				this.vx = 2;
+				this.vy = -2;
+				this.elem = elem_escrow;
+				clearInterval(interval);
+			}
+		}, 1000);
 	}
 }
 
@@ -172,22 +213,52 @@ function main() {
 
 	// key listener
 	window.onkeydown = (e) => {
-		if (e.key == "ArrowRight") {
-			paddles[0].vx = 3;
-		} else if (e.key == "ArrowLeft") {
-			paddles[0].vx = -3;
-		} else if (e.key == "d") {
-			paddles[1].vx = 3;
-		} else if (e.key == "a") {
-			paddles[1].vx = -3;
+		switch (e.key) {
+			case 'ArrowRight':
+				paddles[0].vx = 3;
+				break;
+			case 'ArrowLeft':
+				paddles[0].vx = -3;
+				break;
+			case 'ArrowUp':
+				paddles[0].vy = -1;
+				break;
+			case 'ArrowDown':
+				paddles[0].vy = 1;
+				break;
+			case 'a':
+				paddles[1].vx = -3;
+				break;
+			case 'd':
+				paddles[1].vx = 3;
+				break;
+			case 'w':
+				paddles[1].vx = -1;
+				break;
+			case 's':
+				paddles[1].vx = 1;
+				break;
 		}
 	};
 
 	window.onkeyup = (e) => {
-		if (e.key == "ArrowRight" || e.key == "ArrowLeft") {
-			paddles[0].vx = 0;
-		} else if (e.key == "a" || e.key == "d") {
-			paddles[1].vx = 0;
+		switch (e.key) {
+			case 'ArrowRight':
+			case 'ArrowLeft':
+				paddles[0].vx = 0;
+				break;
+			case 'ArrowUp':
+			case 'ArrowDown':
+				paddles[0].vy = 0;
+				break;
+			case 'a':
+			case 'd':
+				paddles[1].vx = 0;
+				break;
+			case 'w':
+			case 's':
+				paddles[1].vy = 0;
+				break;
 		}
 	}
 	
@@ -201,8 +272,38 @@ function main() {
 					// which quintet?
 					var quintet = (myBall.px - (myPaddle.px + W_PADDLE/2)) / W_PADDLE * 5;
 					console.log('quintet', quintet);
-					myBall.vx += quintet;
+					myBall.vx = quintet;
 					console.log('vballx', myBall.vx);
+				}
+			}
+		}
+
+		// paddle-brick collisions
+		for (var myPaddle of paddles) {
+			for (var myBrick of bricks) {
+				if (myPaddle.team != myBrick.team) {
+					continue;
+				}
+				if (myPaddle.collides(myBrick)) {
+					myPaddle.vy = 0;
+					if (false) {
+					} else if (Math.abs(myPaddle.px + myPaddle.width - myBrick.px) < 2) {
+						myPaddle.px = myBrick.px - myPaddle.width;
+					} else if (Math.abs(myPaddle.px - (myBrick.px + myBrick.width)) < 2) {
+						myPaddle.px = myBrick.px + myBrick.width;
+					} else if (Math.abs(myPaddle.py - (myBrick.py + myBrick.height)) < 2) {
+						myPaddle.py = myBrick.py + myBrick.height;
+					} else if (Math.abs(myPaddle.py + myPaddle.height - myBrick.py) < 2) {
+						myPaddle.py = myBrick.py - myPaddle.height;
+					}
+					// which way is closer?
+					if (myBrick.py + myBrick.height - myPaddle.py <
+						myPaddle.py + myPaddle.height - myBrick.py) {
+
+						myPaddle.py = myBrick.py + myBrick.height;
+					} else {
+						myPaddle.py = myBrick.py - myPaddle.height;
+					}
 				}
 			}
 		}
