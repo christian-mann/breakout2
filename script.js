@@ -233,10 +233,10 @@ function main() {
 				paddles[1].vx = 3;
 				break;
 			case 'w':
-				paddles[1].vx = -1;
+				paddles[1].vy = -1;
 				break;
 			case 's':
-				paddles[1].vx = 1;
+				paddles[1].vy = 1;
 				break;
 		}
 	};
@@ -285,25 +285,28 @@ function main() {
 					continue;
 				}
 				if (myPaddle.collides(myBrick)) {
+					myPaddle.px -= 2 * myPaddle.vx;
+					myPaddle.py -= 2 * myPaddle.vy;
+					myPaddle.vx = 0;
 					myPaddle.vy = 0;
-					if (false) {
-					} else if (Math.abs(myPaddle.px + myPaddle.width - myBrick.px) < 2) {
-						myPaddle.px = myBrick.px - myPaddle.width;
-					} else if (Math.abs(myPaddle.px - (myBrick.px + myBrick.width)) < 2) {
-						myPaddle.px = myBrick.px + myBrick.width;
-					} else if (Math.abs(myPaddle.py - (myBrick.py + myBrick.height)) < 2) {
-						myPaddle.py = myBrick.py + myBrick.height;
-					} else if (Math.abs(myPaddle.py + myPaddle.height - myBrick.py) < 2) {
-						myPaddle.py = myBrick.py - myPaddle.height;
-					}
-					// which way is closer?
-					if (myBrick.py + myBrick.height - myPaddle.py <
-						myPaddle.py + myPaddle.height - myBrick.py) {
+					//if (false) {
+					//} else if (Math.abs(myPaddle.px + myPaddle.width - myBrick.px) < 2) {
+					//	myPaddle.px = myBrick.px - myPaddle.width;
+					//} else if (Math.abs(myPaddle.px - (myBrick.px + myBrick.width)) < 2) {
+					//	myPaddle.px = myBrick.px + myBrick.width;
+					//} else if (Math.abs(myPaddle.py - (myBrick.py + myBrick.height)) < 2) {
+					//	myPaddle.py = myBrick.py + myBrick.height;
+					//} else if (Math.abs(myPaddle.py + myPaddle.height - myBrick.py) < 2) {
+					//	myPaddle.py = myBrick.py - myPaddle.height;
+					//}
+					//// which way is closer?
+					//if (myBrick.py + myBrick.height - myPaddle.py <
+					//	myPaddle.py + myPaddle.height - myBrick.py) {
 
-						myPaddle.py = myBrick.py + myBrick.height;
-					} else {
-						myPaddle.py = myBrick.py - myPaddle.height;
-					}
+					//	myPaddle.py = myBrick.py + myBrick.height;
+					//} else {
+					//	myPaddle.py = myBrick.py - myPaddle.height;
+					//}
 				}
 			}
 		}
