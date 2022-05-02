@@ -103,6 +103,21 @@ class Ball extends Physics {
 		this.bouncy = true;
 	}
 
+	reset() {
+		if (this.team == 0) {
+			this.py = 400;
+			this.px = 225;
+			this.vx = Math.random() * 4 - 2;
+			this.vy = -2;
+		} else {
+			this.py = 100;
+			this.px = 225;
+			this.vx = Math.random() * 4 - 2;
+			this.vy = 2;
+		}
+	}
+
+
 	draw() {
 		super.draw();
 		if (this.elem) {
@@ -130,15 +145,17 @@ class Ball extends Physics {
 				message('You suck. Timeout for ' + timeout + ' seconds.');
 			} else {
 				message('');
-				this.py = 400;
-				this.px = 225;
-				this.vx = 2;
-				this.vy = -2;
+				this.reset();
 				this.elem = elem_escrow;
 				clearInterval(interval);
 			}
 		}, 1000);
 	}
+
+	handle_top_wall() {
+		this.handle_bottom_wall(); // i'm laaaazy
+	}
+
 }
 
 class Brick extends Physics {
@@ -157,20 +174,14 @@ function main() {
 	balls[0].elem = document.createElement("div");
 	balls[0].elem.classList.add("ball");
 	balls[0].elem.classList.add("team-0");
-	balls[0].px = 225;
-	balls[0].py = 400;
-	balls[0].vx = Math.random() * 4 - 2;
-	balls[0].vy = -2;
+	balls[0].reset();
 	game.appendChild(balls[0].elem);
 
 	balls[1].elem = document.createElement("div");
 	balls[1].elem.classList.add("ball");
 	balls[1].elem.classList.add("team-1");
 	balls[1].team = 1;
-	balls[1].px = 225;
-	balls[1].py = 100;
-	balls[1].vx = Math.random() * 4 - 2;
-	balls[1].vy = 2;
+	balls[1].reset();
 	game.appendChild(balls[1].elem);
 
 	var paddles = [new Paddle(), new Paddle()];
